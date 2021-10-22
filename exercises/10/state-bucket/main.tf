@@ -1,5 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+    }
+  }
+}
+
 provider "aws" {
-  version = "~> 2.0"
+ region = "us-east-1"
 }
 
 variable "student_alias" {
@@ -9,7 +17,7 @@ variable "student_alias" {
 # We can see this separate project that's just in charge of setting up our state bucket
 # One might also just do this manually
 resource "aws_s3_bucket" "state_bucket" {
-  bucket_prefix = "dws-di-${var.student_alias}-"
+  bucket_prefix = "blackden-di-${var.student_alias}-"
   force_destroy = true
 }
 

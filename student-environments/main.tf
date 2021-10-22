@@ -1,5 +1,5 @@
 provider "aws" {
-  version = "~> 2.0"
+
   region = "us-west-2"
 }
 
@@ -10,7 +10,7 @@ provider "aws" {
 
 resource "aws_s3_bucket" "student_buckets" {
   count         = length(var.students)
-  bucket        = "dws-di-${var.students[count.index].name}"
+  bucket        = "blackden-di-${var.students[count.index].name}"
   acl           = "private"
   provider      = aws.ohio
   force_destroy = true
@@ -73,8 +73,8 @@ resource "aws_iam_policy" "student_bucket_access" {
                 "s3:*"
             ],
             "Resource": [
-                "arn:aws:s3:::dws-di-${var.students[count.index].name}",
-                "arn:aws:s3:::dws-di-${var.students[count.index].name}-*"
+                "arn:aws:s3:::blackden-di-${var.students[count.index].name}",
+                "arn:aws:s3:::blackden-di-${var.students[count.index].name}-*"
             ]
         },
         {
@@ -84,8 +84,8 @@ resource "aws_iam_policy" "student_bucket_access" {
                 "s3:*"
             ],
             "Resource": [
-              "arn:aws:s3:::dws-di-${var.students[count.index].name}/*",
-              "arn:aws:s3:::dws-di-${var.students[count.index].name}-*/*"
+              "arn:aws:s3:::blackden-di-${var.students[count.index].name}/*",
+              "arn:aws:s3:::blackden-di-${var.students[count.index].name}-*/*"
             ]
         }
     ]

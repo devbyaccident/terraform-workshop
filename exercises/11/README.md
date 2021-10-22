@@ -26,7 +26,7 @@ and be load balanced in AWS. Some key components to this module:
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  version = "~> 2.0"
+
   region  = "${var.aws_region}"
 }
 

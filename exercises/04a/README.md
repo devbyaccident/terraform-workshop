@@ -8,7 +8,7 @@ name in the `.terraform` subdir. Change as noted below:
 ```hcl
 terraform {
   backend "s3" {
-    bucket = "dws-di-* # change '*' to your student alias and add trailing quote
+    bucket = "blackden-di-* # change '*' to your student alias and add trailing quote
     key    = "state/remote-state"
         region = "us-east-2"
   }

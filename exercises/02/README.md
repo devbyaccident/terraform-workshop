@@ -7,7 +7,7 @@ questions, let your instructor know.
 There are many schools of thought on how to use variables to configure reusable terraform, 
 but we'll be exploring the core mechanics so that you can get a grasp of how to use them in various ways.
 
-### Looking at the variable stanza
+### Looking at the variable block
 
 In order to leverage the mechanics around the variable concept in terraform, you must declare each variable.
 
@@ -38,12 +38,12 @@ The possible properties of a variable:
 
 We've only set the description, so there's no default value, and it will use the default type of: `string`.
 
-### Adding the values statically in the variables stanza.
+### Adding the values statically in the variables block.
 
 You might notice that there is no "value" parameter in the syntax for the variable object.  
-This is because the variables stanzas are not meant to be inputs themselves, but rather placeholders
+This is because the variables blocks are not meant to be inputs themselves, but rather placeholders
 that handle input and allow for reference throughout the working directory.  Though it is true that
-variable stanzas can be used this way by simply setting the "default" to the desired value, this 
+variable blocks can be used this way by simply setting the "default" to the desired value, this 
 negates the benefits of Terraform's native re-usability.  Instead, try using one of the below methods.
 
 
@@ -78,11 +78,20 @@ commands will detect it and remind you to do so if necessary.
 ```
 
 The init method picked up on the fact that we had a reference to AWS resources in our HCL. Namely, that we defined
-the AWS provider
+[the AWS provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 
 ```hcl
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws" # The provider source, in this case the hashicorp provider registry
+    }
+  }
+}
+
+# Configure the AWS Provider
 provider "aws" {
-  version = "~> 2.0" # meaning any non-beta version >= 2.0 and < 3.0
+  region = "us-east-1"
 }
 ```
 
