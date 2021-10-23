@@ -298,7 +298,7 @@ After the data source resource is declared, we can then access it's attributes t
 query to AWS
 
 ```
-${data.aws_ami.ubuntu.id}
+data.aws_ami.ubuntu.id
 ```
 
 Second, let's look at the availability zone query pieces
@@ -317,7 +317,7 @@ Similar to the AMI data source, this one also has attributes that have been popu
 the AWS api actually happens. So in our subsequent HCL, we can access the `names` attribute, giving us all AZ names
 
 ```
-${data.aws_availability_zones.available.names}
+data.aws_availability_zones.available.names
 ```
 
 ### Finishing off this exercise

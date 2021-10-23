@@ -4,18 +4,18 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
     }
   }
 }
 
 provider "aws" {
-  region = "${var.region}"
+  region = var.region
 }
 
 # declare a resource block so we can create something.
 resource "aws_s3_bucket" "user_bucket" {
-  bucket_prefix = "${var.student_name}"
+  bucket_prefix = var.student_name
   versioning {
     enabled = true
   }

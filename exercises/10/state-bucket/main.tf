@@ -1,13 +1,13 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
     }
   }
 }
 
 provider "aws" {
- region = "us-east-1"
+  region = "us-east-1"
 }
 
 variable "student_alias" {
@@ -22,5 +22,5 @@ resource "aws_s3_bucket" "state_bucket" {
 }
 
 output "state_bucket_name" {
-  value = "${aws_s3_bucket.state_bucket.bucket}"
+  value = aws_s3_bucket.state_bucket.bucket
 }

@@ -16,7 +16,7 @@ create a Cloud9 server/environment where we'll run further exercises.
 ## Launch your Environment
 
 1. In the top bar of the AWS Console, near the left, you'll see "AWS Services", click on it, and in the drop down search box, type "Cloud9" which will filter available services in the search list. Click on "Cloud9" which will take you to where we can create your environment.
-1. **IMPORTANT**: Select **US East (Ohio)** in the upper right corner of your AWS console as the region
+1. **IMPORTANT**: Select **US East (N. Virginia)** in the upper right corner of your AWS console as the region
 1. Click on "Create Environment"
 1. Give your environment a unique name (your student alias is suggested) and, optionally, a description. Click "Next"
 1. Keep the settings as their defaults on this screen, then click "Next"
@@ -32,19 +32,24 @@ create a Cloud9 server/environment where we'll run further exercises.
 1. This is a fully functioning bash terminal running inside an EC2 instance, but it is the base AWS Linux OS and doesn't have the things we need to execute this workshop, so lets install a few packages.
 
 ```bash
-sudo yum -y install jq git
-sudo pip install --upgrade pip
-sudo ln -s /usr/local/bin/pip /bin
-sudo pip install --upgrade awscli
+sudo yum -y install jq git unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 ```
 
 ## Install Terraform
 
 Run these commands in your cloud9 IDE terminal window to install Terraform
 
+Find complete instructions here:
+
+`https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started#install-terraform`
+
 ```bash
-curl -O https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
-sudo unzip terraform_0.12.24_linux_amd64.zip -d /usr/bin/
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo yum -y install terraform
 ```
 
 Then test to ensure it was installed properly.
@@ -68,28 +73,21 @@ git clone https://github.com/devbyaccident/terraform-workshop .
 
 ## Set up your environment credentials to connect to AWS
 
-place the following in your `~/.bash_profile` file at the bottom, and replace the values in brackets with your generated creds:
-```
-export AWS_ACCESS_KEY_ID=[The access key ID you created above]
-export AWS_SECRET_ACCESS_KEY=[The secret access key you created above]
-export AWS_DEFAULT_REGION=us-east-2
+Now we need to add the access and secret access keys to our AWS Profile. Enter `aws configure`, then put in the following values when prompted:
+
+```bash
+Access Key ID: [AWS Access Key]
+Secret Access Key: [AWS Secret Access Key]
+Region: us-east-1
+Output: [Leave this blank]
 ```
 
-Then source your new .bash_profile and ensure environment has the appropriate env vars set:
-```
+Now if you run `aws configure list-profiles` you should see the `default` profile.
+Run the command below to add this AWS profile to your `~/.bash_profile`. Any AWS CLI commands after this will use the `default` profile.
+
+```bash
+echo 'AWS_PROFILE=default' >> ~/.bash_profile
 source ~/.bash_profile
-env | grep AWS
-```
-
-The printenv above should output something like:
-```
-AWS_SECRET_ACCESS_KEY=xxxxxxx
-AWS_DEFAULT_REGION=us-east-2
-AWS_CLOUDWATCH_HOME=/opt/aws/apitools/mon
-AWS_ACCESS_KEY_ID=xxxxxx
-AWS_PATH=/opt/aws
-AWS_AUTO_SCALING_HOME=/opt/aws/apitools/as
-AWS_ELB_HOME=/opt/aws/apitools/elb
 ```
 
 Having done that, we should be ready to move on!

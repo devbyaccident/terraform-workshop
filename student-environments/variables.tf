@@ -4,5 +4,5 @@ variable "students" {
 }
 
 variable "pgp_key" {
-  description   = "base64 encoded gpg key for use in generating user passwords"
+  description = "base64 encoded gpg key for use in generating user passwords"
 }

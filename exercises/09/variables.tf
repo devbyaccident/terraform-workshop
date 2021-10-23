@@ -12,6 +12,6 @@ variable "object_count" {
 }
 
 variable "include_optional_file" {
-  type        = bool
-  default     = true
+  type    = bool
+  default = true
 }

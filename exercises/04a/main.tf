@@ -6,7 +6,7 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
     }
   }
 }
@@ -15,7 +15,7 @@ terraform {
   backend "s3" {
     bucket = "blackden-di-* # change '*' to your student alias and add trailing quote
     key    = "state/remote-state"
-	region = "us-east-2"
+    region = "us-east-1"
   }
 }
 

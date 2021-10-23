@@ -1,5 +1,5 @@
 output "alb_dns_name" {
-  value = "${aws_alb.web_servers.dns_name}"
+  value = aws_alb.web_servers.dns_name
 }
 
 output "url" {
