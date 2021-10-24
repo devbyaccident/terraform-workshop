@@ -8,10 +8,10 @@ resource "aws_autoscaling_group" "microservice" {
   name                 = aws_launch_configuration.microservice.name
   launch_configuration = aws_launch_configuration.microservice.name
 
-  min_size         = var.min_size
-  max_size         = var.max_size
-  desired_capacity = var.min_size
-  min_elb_capacity = var.min_size
+  min_size         = "${var.min_size}"
+  max_size         = "${var.max_size}"
+  desired_capacity = "${var.min_size}"
+  min_elb_capacity = "${var.min_size}"
 
   # Deploy all the subnets (and therefore AZs) available
   vpc_zone_identifier = data.aws_subnet_ids.default.ids

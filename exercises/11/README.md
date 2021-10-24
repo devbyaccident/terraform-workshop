@@ -82,51 +82,31 @@ terraform init
 which should give you output that includes something like:
 
 ```
-The following providers do not have any version constraints in configuration,
-so the latest version was installed.
+Warning: Quoted references are deprecated
 
-To prevent automatic upgrades to new major versions that may contain breaking
-changes, it is recommended to add version = "..." constraints to the
-corresponding provider blocks in configuration, with the constraint strings
-suggested below.
+  on microservice/main.tf line 41, in resource "aws_autoscaling_group" "microservice":
+  41:   depends_on = ["aws_alb_listener.http"]
 
-* provider.template: version = "~> 2.1"
+In this context, references are expected literally rather than in quotes. Terraform 0.11 and earlier required quotes,
+but quoted references are now deprecated and will be removed in a future version of Terraform. Remove the quotes
+surrounding this reference to silence this warning.
+
+(and one more similar warning elsewhere)
 ```
 
 We're getting this because our microservice module is using:
 
 ```hcl
-data "template_file" "user_data" {
-  template = "${var.user_data_script}"
-
-  vars = {
-    server_text      = "${var.server_text}"
-    server_http_port = "${var.server_http_port}"
-    backend_url      = "${var.backend_url}"
-  }
-}
+  depends_on = ["aws_alb_listener.http"]
 ```
+Don't worry about `depends_on` yet, we'll go into that in the next section.
+Referencing outputs from other resources/modules inside quotes was depricated in Terraform 0.12, but you still may encounter it in some legacy terraform code. It will still run, but it will throw warning messages, and is not considered a best practice.
+There are a couple of ways to fix this: 
+1. First, you could go into the `main.tf` file in the microservice module, find that line, and delete the quotes.
+1. Terraform 0.12 also included a `terraform fmt` command that formats all terraform code in the current directory with the terraform style guidelines.
+1. The fmt command can also be run recursivly in all subdirectories on the working directory. Run `terraform fmt --recursive` to format all *.tf files in your project.
 
-this resource is making use of the `template` provider, but our module doesn't define a specific provider block for it, nor 
-does our terraform using the module, thus we're presented with this message. It's considered best practice to explicitly 
-define provider blocks with some sort of explicit version requirement. Things have been changing fast in terraform and all of
-it's available providers, thus locking down to a particular version or at least major version can be helpful if not
-necessary in many cases.
-
-So, should the block be defined in the module or the thing using the module? The answer depends, but Hashicorp recommends that
-only the _root_ module, or calling Terraform define provider blocks. In this way, those using a module can decide on what
-version of the provider they need to use. Modules will inherit provider definitions implicitly by default. See 
-https://www.terraform.io/docs/configuration/modules.html#providers-within-modules for more info.
-
-Let's add the provider block for the `template` provider and re-run init. Add the following to our root main.tf file at the top:
-
-```hcl
-provider "template" {
-  version = "~> 2.1"
-}
-```
-
-Then we can re-run init:
+You may have to do a combination of these to format your code. Once you do, you can re-run init:
 ```bash
 rm -rf .terraform
 terraform init
@@ -207,10 +187,6 @@ define the same lifecycle rule for terraform internal processing to happen as ex
 We haven't seen these yet, but there's yet another type of data source: a `data "template_file"` resource allows us to load a local
 template file and pass values into for rendering and then for use in another resource. In this case, we pass in our rendered templates
 as the startup scripts for our servers
-
-#### Terraform 0.12 only syntax?
-
-Can you identify the syntax in our project and the `microservice` module that would only work in Terraform v0.12?
 
 ### OK, back to our apply results
 
