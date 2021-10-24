@@ -38,7 +38,7 @@ resource "aws_autoscaling_group" "microservice" {
   # This needs to be here to ensure the ALB has at least one listener rule before the ASG is created. Otherwise, on the
   # very first deployment, the ALB won't bother doing any health checks, which means min_elb_capacity will not be
   # achieved, and the whole deployment will fail.
-  depends_on = ["aws_alb_listener.http"]
+  depends_on = [aws_alb_listener.http]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
