@@ -3,12 +3,19 @@
 
 # Run this from your own machine as well as from your Cloud9 IDE
 # and you'll see that state is maintained across both machines.
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
 
 terraform {
   backend "s3" {
-    bucket = "dws-di-* # change '*' to your student alias and add trailing quote
+    bucket = "blackden-di-* # change '*' to your student alias and add trailing quote
     key    = "state/remote-state"
-	region = "us-east-2"
+    region = "us-east-1"
   }
 }
 

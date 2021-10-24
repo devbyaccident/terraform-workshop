@@ -10,7 +10,7 @@ First, create a main.tf file in the main directory for the 6th exercise.  Inside
 
 ```hcl
 provider "aws" {
-  version = "~> 2.0"
+  region = "us-east-1"
 }
 
 module "s3_bucket_01" {

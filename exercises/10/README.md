@@ -21,7 +21,7 @@ terraform {
 }
 ```
 
-_ASIDE: The above is the first time we're seeing the root `terraform` block or stanza. In many cases, it's sole use will
+_ASIDE: The above is the first time we're seeing the root `terraform` block. In many cases, it's sole use will
 be for defining a remote backend, but it also allows you to do things like define a required terraform version via
 semantic version syntax. See https://www.terraform.io/docs/configuration/terraform.html for more info_
 
@@ -58,7 +58,7 @@ Terraform will perform the following actions:
       + arn                         = (known after apply)
       + bucket                      = (known after apply)
       + bucket_domain_name          = (known after apply)
-      + bucket_prefix               = "dws-di-bane-"
+      + bucket_prefix               = "blackden-di-bane-"
       + bucket_regional_domain_name = (known after apply)
       + force_destroy               = true
       + hosted_zone_id              = (known after apply)
@@ -83,13 +83,13 @@ Do you want to perform these actions?
   Enter a value: yes
 
 aws_s3_bucket.state_bucket: Creating...
-aws_s3_bucket.state_bucket: Creation complete after 5s [id=dws-di-bane-20190623022126911700000001]
+aws_s3_bucket.state_bucket: Creation complete after 5s [id=blackden-di-bane-20190623022126911700000001]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-state_bucket_name = dws-di-bane-20190623022126911700000001
+state_bucket_name = blackden-di-bane-20190623022126911700000001
 ```
 
 Now, before we move on, you may be asking yourself: so what about the state for this state bucket? And it's a good 
