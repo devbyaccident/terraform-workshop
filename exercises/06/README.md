@@ -9,6 +9,14 @@ constantly redeclaring everything, we are just going to reference the module tha
 First, create a main.tf file in the main directory for the 6th exercise.  Inside the `main.tf` file you created, please add the following:
 
 ```hcl
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
+
 provider "aws" {
   region = "us-east-1"
 }
