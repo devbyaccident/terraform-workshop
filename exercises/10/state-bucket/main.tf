@@ -17,7 +17,7 @@ variable "student_alias" {
 # We can see this separate project that's just in charge of setting up our state bucket
 # One might also just do this manually
 resource "aws_s3_bucket" "state_bucket" {
-  bucket_prefix = "blackden-di-${var.student_alias}-"
+  bucket_prefix = "terraform-intro-di-${var.student_alias}-"
   force_destroy = true
 }
 

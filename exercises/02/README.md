@@ -180,3 +180,4 @@ locals {
 
 This is where we'll stop for now. We'll begin actually working with applying these plans in our next exercise.
 
+Go ahead and run `rm -rf .terraform` to clean up, and raise your hand.

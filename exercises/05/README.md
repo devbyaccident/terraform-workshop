@@ -37,7 +37,7 @@ terraform init
 terraform apply
 terraform show
 ```
-The above should show that you have a bucket now named `blackden-di-[your student alias]-alt` that was created in the
+The above should show that you have a bucket now named `terraform-intro-di-[your student alias]-alt` that was created in the
 us-west-2 region.
 
 *NOTE:* that at the beginning of our course we set the `AWS_DEFAULT_REGION` environment variable in your Cloud9 environment.
@@ -53,3 +53,5 @@ Let's run the following to finish:
 ```
 terraform destroy
 ```
+
+Once the resources have all been destroyed, run `rm -rf .terraform` and raise your hand.

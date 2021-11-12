@@ -31,12 +31,6 @@ resource "aws_iam_user" "students" {
   force_destroy = true
 }
 
-resource "aws_iam_access_key" "tests" {
-  count      = length(var.students)
-  user       = var.students[count.index].name
-  depends_on = [aws_iam_user.students]
-}
-
 resource "aws_iam_user_login_profile" "students" {
   count                   = length(var.students)
   user                    = var.students[count.index].name

@@ -341,3 +341,4 @@ Let's destroy everything before we move on. **PLEASE make sure you do it for thi
 ```
 terraform destroy
 ```
+Once the resources have all been destroyed, run `rm -rf .terraform` and raise your hand.

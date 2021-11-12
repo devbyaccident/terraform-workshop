@@ -46,7 +46,7 @@ Terraform will perform the following actions:
   # aws_s3_bucket_object.user_student_alias_object will be created
   + resource "aws_s3_bucket_object" "user_student_alias_object" {
       + acl                    = "private"
-      + bucket                 = "blackden-di-..."
+      + bucket                 = "terraform-intro-di-..."
       + content                = "This bucket is reserved for ..."
       + content_type           = (known after apply)
       + etag                   = (known after apply)
@@ -94,7 +94,7 @@ Terraform will perform the following actions:
   # aws_s3_bucket_object.user_student_alias_object will be created
   + resource "aws_s3_bucket_object" "user_student_alias_object" {
       + acl                    = "private"
-      + bucket                 = "blackden-di-..."
+      + bucket                 = "terraform-intro-di-..."
       + content                = "This bucket is reserved for ..."
       + content_type           = (known after apply)
       + etag                   = (known after apply)
@@ -140,7 +140,7 @@ Find `main.tf` and modify the s3 bucket block to reflect the following:
 ```hcl
 # declare a resource block so we can create something.
 resource "aws_s3_bucket_object" "user_student_alias_object" {
-  bucket  = "blackden-di-${var.student_alias}"
+  bucket  = "terraform-intro-di-${var.student_alias}"
   key     = "student.alias"
   content = "This bucket is reserved for ${var.student_alias} ****ONLY****"
 }
@@ -160,7 +160,7 @@ Terraform will perform the following actions:
   # aws_s3_bucket_object.user_student_alias_object will be updated in-place
   ~ resource "aws_s3_bucket_object" "user_student_alias_object" {
         acl           = "private"
-        bucket        = "blackden-di-..."
+        bucket        = "terraform-intro-di-..."
       ~ content       = "This bucket is reserved for ..." -> "This bucket is reserved for ... ****ONLY****"
         content_type  = "binary/octet-stream"
         etag          = "94e32327b8007fa215f3a9edbda7f68c"
@@ -211,7 +211,7 @@ Terraform will perform the following actions:
   # aws_s3_bucket_object.user_student_alias_object will be destroyed
   - resource "aws_s3_bucket_object" "user_student_alias_object" {
       - acl           = "private" -> null
-      - bucket        = "blackden-di-chucky" -> null
+      - bucket        = "terraform-intro-di-chucky" -> null
       - content       = "This bucket is reserved for ... ****ONLY****" -> null
       - content_type  = "binary/octet-stream" -> null
       - etag          = "c7e49348083281f9dd997923fe6084b7" -> null
@@ -238,3 +238,4 @@ Destroy complete! Resources: 1 destroyed.
 You'll notice that the destroy process if very similar to apply, just the other way around! And it also requires
 confirmation, which is a good thing.
 
+Run `rm -rf .terraform` to cleanup and raise your hand.

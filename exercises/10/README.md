@@ -58,7 +58,7 @@ Terraform will perform the following actions:
       + arn                         = (known after apply)
       + bucket                      = (known after apply)
       + bucket_domain_name          = (known after apply)
-      + bucket_prefix               = "blackden-di-bane-"
+      + bucket_prefix               = "terraform-intro-di-bane-"
       + bucket_regional_domain_name = (known after apply)
       + force_destroy               = true
       + hosted_zone_id              = (known after apply)
@@ -83,13 +83,13 @@ Do you want to perform these actions?
   Enter a value: yes
 
 aws_s3_bucket.state_bucket: Creating...
-aws_s3_bucket.state_bucket: Creation complete after 5s [id=blackden-di-bane-20190623022126911700000001]
+aws_s3_bucket.state_bucket: Creation complete after 5s [id=terraform-intro-di-bane-20190623022126911700000001]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-state_bucket_name = blackden-di-bane-20190623022126911700000001
+state_bucket_name = terraform-intro-di-bane-20190623022126911700000001
 ```
 
 Now, before we move on, you may be asking yourself: so what about the state for this state bucket? And it's a good 
@@ -205,3 +205,4 @@ terraform destroy
 cd state-bucket
 terraform destroy
 ```
+Once the resources have all been destroyed, run `rm -rf .terraform` and raise your hand.
