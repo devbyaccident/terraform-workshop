@@ -331,3 +331,4 @@ a bit with things that look interesting to you in the HCL syntax, variable, and 
 
 Maybe try some of the above out with `terraform console`?
 
+Once you're ready to move on, raise your hand.

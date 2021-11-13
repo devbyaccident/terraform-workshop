@@ -13,7 +13,7 @@ terraform {
 
 terraform {
   backend "s3" {
-    bucket = "blackden-di-* # change '*' to your student alias and add trailing quote
+    bucket = "terraform-intro-di-*" # change '*' to your student alias
     key    = "state/remote-state"
     region = "us-east-1"
   }

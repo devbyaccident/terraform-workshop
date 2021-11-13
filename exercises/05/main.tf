@@ -17,6 +17,6 @@ provider "aws" {
 
 # declare a resource block so we can create something.
 resource "aws_s3_bucket" "student_bucket_alt" {
-  bucket = "blackden-di-${var.student_alias}-alt"
+  bucket = "terraform-intro-di-${var.student_alias}-alt"
 }
 

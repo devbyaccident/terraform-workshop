@@ -10,7 +10,7 @@ provider "aws" {
 
 resource "aws_s3_bucket" "student_buckets" {
   count         = length(var.students)
-  bucket        = "blackden-di-${var.students[count.index].name}"
+  bucket        = "terraform-intro-di-${var.students[count.index].name}"
   acl           = "private"
   provider      = aws.ohio
   force_destroy = true
@@ -29,12 +29,6 @@ resource "aws_iam_user" "students" {
   count         = length(var.students)
   name          = var.students[count.index].name
   force_destroy = true
-}
-
-resource "aws_iam_access_key" "tests" {
-  count      = length(var.students)
-  user       = var.students[count.index].name
-  depends_on = [aws_iam_user.students]
 }
 
 resource "aws_iam_user_login_profile" "students" {
@@ -73,8 +67,8 @@ resource "aws_iam_policy" "student_bucket_access" {
                 "s3:*"
             ],
             "Resource": [
-                "arn:aws:s3:::blackden-di-${var.students[count.index].name}",
-                "arn:aws:s3:::blackden-di-${var.students[count.index].name}-*"
+                "arn:aws:s3:::terraform-intro-di-${var.students[count.index].name}",
+                "arn:aws:s3:::terraform-intro-di-${var.students[count.index].name}-*"
             ]
         },
         {
@@ -84,8 +78,8 @@ resource "aws_iam_policy" "student_bucket_access" {
                 "s3:*"
             ],
             "Resource": [
-              "arn:aws:s3:::blackden-di-${var.students[count.index].name}/*",
-              "arn:aws:s3:::blackden-di-${var.students[count.index].name}-*/*"
+              "arn:aws:s3:::terraform-intro-di-${var.students[count.index].name}/*",
+              "arn:aws:s3:::terraform-intro-di-${var.students[count.index].name}-*/*"
             ]
         }
     ]
@@ -123,6 +117,14 @@ resource "aws_iam_policy" "student_ec2_access" {
                         "*.micro",
                         "*.medium"
                     ]
+                },
+                "StringNotLike": {
+                    "aws:RequestedRegion": [
+                      "us-east-1",
+                      "us-east-2",
+                      "us-west-1",
+                      "us-west-2"
+                    ]
                 }
             }
         },
@@ -130,13 +132,33 @@ resource "aws_iam_policy" "student_ec2_access" {
             "Sid": "AllowAllELB",
             "Effect": "Allow",
             "Action": "elasticloadbalancing:*",
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": [
+                      "us-east-1",
+                      "us-east-2",
+                      "us-west-1",
+                      "us-west-2"
+                    ]
+                }
+            }
         },
         {
             "Sid": "AllowAllAutoscaling",
             "Effect": "Allow",
             "Action": "autoscaling:*",
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": [
+                      "us-east-1",
+                      "us-east-2",
+                      "us-west-1",
+                      "us-west-2"
+                    ]
+                }
+            }
         },
         {
             "Effect": "Allow",
@@ -151,6 +173,12 @@ resource "aws_iam_policy" "student_ec2_access" {
                         "spot.amazonaws.com",
                         "spotfleet.amazonaws.com",
                         "transitgateway.amazonaws.com"
+                    ],
+                    "aws:RequestedRegion": [
+                      "us-east-1",
+                      "us-east-2",
+                      "us-west-1",
+                      "us-west-2"
                     ]
                 }
             }

@@ -33,7 +33,7 @@ You should see something like this below:
 # aws_s3_bucket_object.user_student_alias_object: 
 resource "aws_s3_bucket_object" "user_student_alias_object" {
     acl           = "private"
-    bucket        = "blackden-di-chucky"
+    bucket        = "terraform-intro-di-chucky"
     content       = "This bucket is reserved for chucky"
     content_type  = "binary/octet-stream"
     etag          = "94e32327b8007fa215f3a9edbda7f68c"
@@ -98,3 +98,5 @@ Let's run the following to finish:
 ```bash
 terraform destroy
 ```
+
+Once the resources have all been destroyed, run `rm -rf .terraform` and raise your hand.

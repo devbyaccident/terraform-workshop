@@ -8,7 +8,7 @@ name in the `.terraform` subdir. Change as noted below:
 ```hcl
 terraform {
   backend "s3" {
-    bucket = "blackden-di-* # change '*' to your student alias and add trailing quote
+    bucket = "terraform-intro-di-*" # change '*' to your student alias
     key    = "state/remote-state"
         region = "us-east-1"
   }
@@ -83,4 +83,4 @@ terraform workspace select sandbox
 terraform destroy
 ```
 
-
+Once the resources have all been destroyed, run `rm -rf .terraform` and raise your hand.

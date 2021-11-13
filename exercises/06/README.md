@@ -70,3 +70,4 @@ Let's run the following to finish:
 ```
 terraform destroy
 ```
+Once the resources have all been destroyed, run `rm -rf .terraform` and raise your hand.

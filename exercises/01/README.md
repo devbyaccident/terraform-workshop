@@ -25,7 +25,7 @@ provider "aws" {
 
 # declare a resource block so we can create something.
 resource "aws_s3_bucket_object" "user_student_alias_object" {
-  bucket  = "blackden-di-${var.student_alias}"
+  bucket  = "terraform-intro-di-${var.student_alias}"
   key     = "student.alias"
   content = "This bucket is reserved for ${var.student_alias}"
 }
@@ -66,3 +66,9 @@ terraform validate
 
 If your "terraform init" command was successful, then you should be ready to move on. For now, don't run an apply.  
 We will get to this in a future exercise.
+
+When you run the `terraform init` command, notice that a new *.terraform* directory was created.
+
+We are going to learn about this later, but since Cloud9 instances are limited on storage, it's a good idea to clean this up before finishing the exercise so it doesn't impact future exercises.
+
+To do this, run `rm -rf .terraform`, then raise your hand to show that you're finished with the exercise.
