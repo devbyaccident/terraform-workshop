@@ -34,8 +34,8 @@ Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  # aws_s3_bucket_object.dynamic_file[0] will be created
-  + resource "aws_s3_bucket_object" "dynamic_file" {
+  # aws_s3_object.dynamic_file[0] will be created
+  + resource "aws_s3_object" "dynamic_file" {
       + acl                    = "private"
       + bucket                 = "terraform-intro-di-chucky"
       + content                = "dynamic-file at index 0"
@@ -48,8 +48,8 @@ Terraform will perform the following actions:
       + version_id             = (known after apply)
     }
 
-  # aws_s3_bucket_object.dynamic_file[1] will be created
-  + resource "aws_s3_bucket_object" "dynamic_file" {
+  # aws_s3_object.dynamic_file[1] will be created
+  + resource "aws_s3_object" "dynamic_file" {
       + acl                    = "private"
       + bucket                 = "terraform-intro-di-chucky"
       + content                = "dynamic-file at index 1"
@@ -62,8 +62,8 @@ Terraform will perform the following actions:
       + version_id             = (known after apply)
     }
 
-  # aws_s3_bucket_object.dynamic_file[2] will be created
-  + resource "aws_s3_bucket_object" "dynamic_file" {
+  # aws_s3_object.dynamic_file[2] will be created
+  + resource "aws_s3_object" "dynamic_file" {
       + acl                    = "private"
       + bucket                 = "terraform-intro-di-chucky"
       + content                = "dynamic-file at index 2"
@@ -76,8 +76,8 @@ Terraform will perform the following actions:
       + version_id             = (known after apply)
     }
 
-  # aws_s3_bucket_object.optional_file[0] will be created
-  + resource "aws_s3_bucket_object" "optional_file" {
+  # aws_s3_object.optional_file[0] will be created
+  + resource "aws_s3_object" "optional_file" {
       + acl                    = "private"
       + bucket                 = "terraform-intro-di-chucky"
       + content                = "optional-file"
@@ -101,11 +101,11 @@ can't guarantee that exactly these actions will be performed if
 
 ### The `count` parameter
 
-Let's look at the `main.tf` file here to see what's going on. First, the `aws_s3_bucket_object.dynamic_file` definition
+Let's look at the `main.tf` file here to see what's going on. First, the `aws_s3_object.dynamic_file` definition
 
 ```hcl
-resource "aws_s3_bucket_object" "dynamic_file" {
-  count   = "${var.object_count}"
+resource "aws_s3_object" "dynamic_file" {
+  count   = var.object_count
   bucket  = "terraform-intro-di-${var.student_alias}"
   key     = "dynamic-file-${count.index}"
   content = "dynamic-file at index ${count.index}"
@@ -123,13 +123,13 @@ variable "object_count" {
 }
 ```
 
-And it has a default value of *3*, so our `aws_s3_bucket_object` resource uses the `count` property to dynamically define the number
+And it has a default value of *3*, so our `aws_s3_object` resource uses the `count` property to dynamically define the number
 of "copies" of this resource we'd like. This all adds up to our plan telling us that the following would be created:
 
 ```
-aws_s3_bucket_object.dynamic_file[0] will be created
-aws_s3_bucket_object.dynamic_file[1] will be created
-aws_s3_bucket_object.dynamic_file[2] will be created
+aws_s3_object.dynamic_file[0] will be created
+aws_s3_object.dynamic_file[1] will be created
+aws_s3_object.dynamic_file[2] will be created
 ```
 
 ### Conditional HCL Resources
@@ -138,23 +138,23 @@ The count parameter, now in combination with the `bool` type is particularly use
 things in your ultimately built infrastructure. Let's look at our `main.tf` again to see an example
 
 ```hcl
-resource "aws_s3_bucket_object" "optional_file" {
-  count   = "${var.include_optional_file ? 1 : 0}"
+resource "aws_s3_object" "optional_file" {
+  count   = var.include_optional_file ? 1 : 0
   bucket  = "terraform-intro-di-${var.student_alias}"
   key     = "optional-file"
   content = "optional-file"
 }
 ```
 
-So, our `count   = "${var.include_optional_file ? 1 : 0}"` syntax says: if the `include_optional_file` variable is set to true, we
+So, our `count   = var.include_optional_file ? 1 : 0` syntax says: if the `include_optional_file` variable is set to true, we
 want one instance of this object, otherwise we want 0. Could you think of another way to produce the same result? Hint: it's how
 you had to do it before the `bool` data type came around.
 
 We see in our plan output
 
 ```
-  # aws_s3_bucket_object.optional_file[0] will be created
-  + resource "aws_s3_bucket_object" "optional_file" {
+  # aws_s3_object.optional_file[0] will be created
+  + resource "aws_s3_object" "optional_file" {
       + acl                    = "private"
       + bucket                 = "terraform-intro-di-chucky"
       + content                = "optional-file"

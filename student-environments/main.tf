@@ -1,19 +1,17 @@
 provider "aws" {
-
-  region = "us-west-2"
-}
-
-provider "aws" {
-  alias  = "ohio"
-  region = "us-east-2"
+  region = "us-east-1"
 }
 
 resource "aws_s3_bucket" "student_buckets" {
   count         = length(var.students)
   bucket        = "terraform-intro-di-${var.students[count.index].name}"
-  acl           = "private"
-  provider      = aws.ohio
   force_destroy = true
+}
+
+resource "aws_s3_bucket_acl" "student_bucket_acl" {
+  count  = length(var.students)
+  bucket = aws_s3_bucket.student_buckets[count.index].id
+  acl    = "private"
 }
 
 resource "aws_iam_account_password_policy" "students" {

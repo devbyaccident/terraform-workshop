@@ -63,8 +63,14 @@ you should get an output similar to this:
 Initializing the backend...
 
 Initializing provider plugins...
-- Checking for available provider plugins...
-- Downloading plugin for provider "aws" (terraform-providers/aws) 2.15.0...
+- Finding latest version of hashicorp/aws...
+- Installing hashicorp/aws v4.0.0...
+- Installed hashicorp/aws v4.0.0 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
 
 Terraform has been successfully initialized!
 
@@ -85,6 +91,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws" # The provider source, in this case the hashicorp provider registry
+      version = "4.0.0" # The provider version to use from the hashicorp provider registry
     }
   }
 }

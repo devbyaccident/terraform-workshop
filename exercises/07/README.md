@@ -14,24 +14,15 @@ terraform apply
 
 You should see something like:
 
-```Error: Could not satisfy plugin requirements
+```
 
-
-Plugin reinitialization required. Please run "terraform init".
-
-Plugins are external binaries that Terraform uses to access and manipulate
-resources. The configuration provided requires plugins which can't be located,
-don't satisfy the version constraints, or are otherwise incompatible.
-
-Terraform automatically discovers provider requirements from your
-configuration, including providers used in child modules. To see the
-requirements and constraints from each module, run "terraform providers".
-
-
-
-Error: provider.aws: no suitable version installed
-  version requirements: "~> 2.0"
-  versions installed: none
+ Error: Inconsistent dependency lock file
+ 
+ The following dependency selections recorded in the lock file are inconsistent with the current configuration:
+   - provider registry.terraform.io/hashicorp/aws: required by this configuration but no version is selected
+ 
+ To make the initial dependency selections that will initialize the dependency lock file, run:
+   terraform init
 ```
 
 One of `init`'s jobs is to ensure that dependencies like providers, modules, etc. are pulled
@@ -50,10 +41,13 @@ unset TF_VAR_student_alias && terraform apply -input=false
 Which should give you something like:
 
 ```
-Error: Unassigned variable
+Error: No value for required variable
 
-The input variable "student_alias" has not been assigned a value. This is a
-bug in Terraform; please report it in a GitHub issue.
+  on variables.tf line 4:
+   4: variable "student_alias" {
+
+The root module input variable "student_alias" is not set, and has no default value. Use a -var or -var-file command line argument to provide a
+value for this variable.
 ```
 
 ### Syntactical Errors
@@ -61,7 +55,7 @@ bug in Terraform; please report it in a GitHub issue.
 Let's modify the `main.tf` file here to include something invalid. At the end of the file, add this:
 
 ```hcl
-resource "aws_s3_bucket_object" "an_invalid_resource_definition" {
+resource "aws_s3_object" "an_invalid_resource_definition" {
 ```
 
 Clearly a syntax problem, so let's run
@@ -73,12 +67,12 @@ terraform plan
 And you should see something like
 
 ```
-Error: Argument or block definition required
+Error: Unclosed configuration block
 
-  on main.tf line 17, in resource "aws_s3_bucket_object" "an_invalid_resource_definition":
-  17: 
+  on main.tf line 25, in resource "aws_s3_object" "an_invalid_resource_definition":
+  25: resource "aws_s3_object" "an_invalid_resource_definition" {
 
-An argument or block definition is required here.
+There is no closing brace for this block before the end of the file. This may be caused by incorrect brace nesting elsewhere in this file.
 ```
 
 The goal is to get used to what things look like depending on the type of error encountered. These syntax 
@@ -87,12 +81,12 @@ errors happen early in the processing of Terraform commands.
 ### Validation Errors
 
 This one might not be as clear as the syntax problem above. Let's pass something invalid
-to the AWS provider by setting a property that doesn't jive with the `aws_s3_bucket_object`
+to the AWS provider by setting a property that doesn't jive with the `aws_s3_object`
 resource as defined in the AWS provider. We'll modify the syntax issue above slightly, so change
 your resource definition to be:
 
 ```hcl
-resource "aws_s3_bucket_object" "an_invalid_resource_definition" {
+resource "aws_s3_object" "an_invalid_resource_definition" {
   key     = "student.alias"
   content = "This bucket is reserved for ${var.student_alias}"
 }
@@ -119,13 +113,13 @@ Having run `terraform validate` you should see immediately something like the fo
 ```
 Error: Missing required argument
 
-  on main.tf line 17, in resource "aws_s3_bucket_object" "an_invalid_resource_definition":
-  17: resource "aws_s3_bucket_object" "an_invalid_resource_definition" {
+  on main.tf line 17, in resource "aws_s3_object" "an_invalid_resource_definition":
+  17: resource "aws_s3_object" "an_invalid_resource_definition" {
 
 The argument "bucket" is required, but no definition was found.
 ```
 
-So, our provider is actually giving us this. The AWS provider defines what a `aws_s3_bucket_object` should include,
+So, our provider is actually giving us this. The AWS provider defines what a `aws_s3_object` should include,
 and what is required. The `bucket` property is required, so it's tell us we have a problem with this resource defintion.
 
 ### Provider Errors or Passthrough
@@ -135,7 +129,7 @@ that happen when actually trying to do the work of setting up or maintaining you
 Modify the invalid resource we've been working with here in `main.tf` to now be:
 
 ```hcl
-resource "aws_s3_bucket_object" "a_resource_that_will_fail" {
+resource "aws_s3_object" "a_resource_that_will_fail" {
   bucket  = "a-bucket-that-doesnt-exist-or-i-dont-own"
   key     = "file"
   content = "This will never exist"
@@ -151,41 +145,30 @@ terraform apply
 And you should see something like:
 
 ```
-An execution plan has been generated and is shown below.
-Resource actions are indicated with the following symbols:
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
   + create
 
 Terraform will perform the following actions:
 
-  # aws_s3_bucket_object.a_resource_that_will_fail will be created
-  + resource "aws_s3_bucket_object" "a_resource_that_will_fail" {
+  # aws_s3_object.a_resource_that_will_fail will be created
+  + resource "aws_s3_object" "a_resource_that_will_fail" {
       + acl                    = "private"
       + bucket                 = "a-bucket-that-doesnt-exist-or-i-dont-own"
+      + bucket_key_enabled     = (known after apply)
       + content                = "This will never exist"
       + content_type           = (known after apply)
       + etag                   = (known after apply)
+      + force_destroy          = false
       + id                     = (known after apply)
       + key                    = "file"
+      + kms_key_id             = (known after apply)
       + server_side_encryption = (known after apply)
       + storage_class          = (known after apply)
+      + tags_all               = (known after apply)
       + version_id             = (known after apply)
     }
 
-  # aws_s3_bucket_object.user_student_alias_object will be created
-  + resource "aws_s3_bucket_object" "user_student_alias_object" {
-      + acl                    = "private"
-      + bucket                 = "terraform-intro-di-chucky"
-      + content                = "This bucket is reserved for chucky"
-      + content_type           = (known after apply)
-      + etag                   = (known after apply)
-      + id                     = (known after apply)
-      + key                    = "student.alias"
-      + server_side_encryption = (known after apply)
-      + storage_class          = (known after apply)
-      + version_id             = (known after apply)
-    }
-
-Plan: 2 to add, 0 to change, 0 to destroy.
+Plan: 1 to add, 0 to change, 0 to destroy.
 
 Do you want to perform these actions?
   Terraform will perform the actions described above.
@@ -193,15 +176,14 @@ Do you want to perform these actions?
 
   Enter a value: yes
 
-aws_s3_bucket_object.a_resource_that_will_fail: Creating...
-aws_s3_bucket_object.user_student_alias_object: Creating...
-aws_s3_bucket_object.user_student_alias_object: Creation complete after 1s [id=student.alias]
+aws_s3_object.a_resource_that_will_fail: Creating...
 
-Error: Error putting object in S3 bucket (a-bucket-that-doesnt-exist-or-i-dont-own): NoSuchBucket: The specified bucket does not exist
-        status code: 404, request id: 13C49158C71AE950, host id: /b1aIUG6gMMiJCI2PBVKDoBcBmutIR/vMEqEeTTojSxj400e31jcsETZCOGxRGQ031ilI1QrcWY=
+Error: Error uploading object to S3 bucket (a-bucket-that-doesnt-exist-or-i-dont-own): NoSuchBucket: The specified bucket does not exist
+      status code: 404, request id: ZD18Q9YK7WZVA9XZ, host id: 4JHZAWbmz41/zGAA5qaJar2sxIrtxoOz3C5C9mPDXyZuBohqRvTL58bOp4UhCMN8OYkpaJqjxGE=
 
-  on main.tf line 17, in resource "aws_s3_bucket_object" "a_resource_that_will_fail":
-  17: resource "aws_s3_bucket_object" "a_resource_that_will_fail" {
+  with aws_s3_object.a_resource_that_will_fail,
+  on main.tf line 20, in resource "aws_s3_object" "a_resource_that_will_fail":
+  20: resource "aws_s3_object" "a_resource_that_will_fail" {
 ```
 
 Where is this error actually coming from? In this case, it's the AWS S3 API. It's trying to put an object to a bucket that 
@@ -211,15 +193,15 @@ in which we're trying to put the object either doesn't exist or we don't own it,
 One other thing worth noting–Did everything fail?
 
 ```
-aws_s3_bucket_object.a_resource_that_will_fail: Creating...
-aws_s3_bucket_object.user_student_alias_object: Creating...
-aws_s3_bucket_object.user_student_alias_object: Creation complete after 1s [id=student.alias]
+aws_s3_object.a_resource_that_will_fail: Creating...
+aws_s3_object.user_student_alias_object: Creating...
+aws_s3_object.user_student_alias_object: Creation complete after 1s [id=student.alias]
 
 Error: Error putting object in S3 bucket (a-bucket-that-doesnt-exist-or-i-dont-own): NoSuchBucket: The specified bucket does not exist
         status code: 404, request id: 13C49158C71AE950, host id: /b1aIUG6gMMiJCI2PBVKDoBcBmutIR/vMEqEeTTojSxj400e31jcsETZCOGxRGQ031ilI1QrcWY=
 
-  on main.tf line 17, in resource "aws_s3_bucket_object" "a_resource_that_will_fail":
-  17: resource "aws_s3_bucket_object" "a_resource_that_will_fail" {
+  on main.tf line 17, in resource "aws_s3_object" "a_resource_that_will_fail":
+  17: resource "aws_s3_object" "a_resource_that_will_fail" {
 ```
 
 Nope! Our first bucket object that was valid was created, only the second one failed. Terraform will complete 
@@ -231,7 +213,7 @@ the same Terraform multiple times (e.g., if there's a network issue between wher
 First, remove the offending HCL now in `main.tf`
 
 ```
-resource "aws_s3_bucket_object" "a_resource_that_will_fail" {
+resource "aws_s3_object" "a_resource_that_will_fail" {
   bucket  = "a-bucket-that-doesnt-exist-or-i-dont-own"
   key     = "file"
   content = "This will never exist"

@@ -43,8 +43,8 @@ Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  # aws_s3_bucket_object.user_student_alias_object will be created
-  + resource "aws_s3_bucket_object" "user_student_alias_object" {
+  # aws_s3_object.user_student_alias_object will be created
+  + resource "aws_s3_object" "user_student_alias_object" {
       + acl                    = "private"
       + bucket                 = "terraform-intro-di-..."
       + content                = "This bucket is reserved for ..."
@@ -91,8 +91,8 @@ Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  # aws_s3_bucket_object.user_student_alias_object will be created
-  + resource "aws_s3_bucket_object" "user_student_alias_object" {
+  # aws_s3_object.user_student_alias_object will be created
+  + resource "aws_s3_object" "user_student_alias_object" {
       + acl                    = "private"
       + bucket                 = "terraform-intro-di-..."
       + content                = "This bucket is reserved for ..."
@@ -113,8 +113,8 @@ Do you want to perform these actions?
 
   Enter a value: yes
 
-aws_s3_bucket_object.user_student_alias_object: Creating...
-aws_s3_bucket_object.user_student_alias_object: Creation complete after 1s [id=student.alias]
+aws_s3_object.user_student_alias_object: Creating...
+aws_s3_object.user_student_alias_object: Creation complete after 1s [id=student.alias]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
@@ -139,7 +139,7 @@ Find `main.tf` and modify the s3 bucket block to reflect the following:
 
 ```hcl
 # declare a resource block so we can create something.
-resource "aws_s3_bucket_object" "user_student_alias_object" {
+resource "aws_s3_object" "user_student_alias_object" {
   bucket  = "terraform-intro-di-${var.student_alias}"
   key     = "student.alias"
   content = "This bucket is reserved for ${var.student_alias} ****ONLY****"
@@ -159,15 +159,11 @@ Terraform will perform the following actions:
 
   # aws_s3_bucket_object.user_student_alias_object will be updated in-place
   ~ resource "aws_s3_bucket_object" "user_student_alias_object" {
-        acl           = "private"
-        bucket        = "terraform-intro-di-..."
-      ~ content       = "This bucket is reserved for ..." -> "This bucket is reserved for ... ****ONLY****"
-        content_type  = "binary/octet-stream"
-        etag          = "94e32327b8007fa215f3a9edbda7f68c"
-        id            = "student.alias"
-        key           = "student.alias"
-        storage_class = "STANDARD"
-        tags          = {}
+      ~ content            = "This bucket is reserved for ..." -> "This bucket is reserved for ... **ONLY***"
+        id                 = "student.alias"
+        tags               = {}
+      + version_id         = (known after apply)
+        # (10 unchanged attributes hidden)
     }
 
 Plan: 0 to add, 1 to change, 0 to destroy.
@@ -200,7 +196,7 @@ terraform destroy
 You should get the following:
 
 ```
-aws_s3_bucket_object.user_student_alias_object: Refreshing state... [id=student.alias]
+aws_s3_object.user_student_alias_object: Refreshing state... [id=student.alias]
 
 An execution plan has been generated and is shown below.
 Resource actions are indicated with the following symbols:
@@ -208,8 +204,8 @@ Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  # aws_s3_bucket_object.user_student_alias_object will be destroyed
-  - resource "aws_s3_bucket_object" "user_student_alias_object" {
+  # aws_s3_object.user_student_alias_object will be destroyed
+  - resource "aws_s3_object" "user_student_alias_object" {
       - acl           = "private" -> null
       - bucket        = "terraform-intro-di-chucky" -> null
       - content       = "This bucket is reserved for ... ****ONLY****" -> null
@@ -229,8 +225,8 @@ Do you really want to destroy all resources?
 
   Enter a value: yes
 
-aws_s3_bucket_object.user_student_alias_object: Destroying... [id=student.alias]
-aws_s3_bucket_object.user_student_alias_object: Destruction complete after 0s
+aws_s3_object.user_student_alias_object: Destroying... [id=student.alias]
+aws_s3_object.user_student_alias_object: Destruction complete after 0s
 
 Destroy complete! Resources: 1 destroyed.
 ```
