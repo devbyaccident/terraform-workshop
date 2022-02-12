@@ -4,7 +4,8 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
+      version = "4.0.0"
     }
   }
 }
@@ -16,7 +17,7 @@ provider "aws" {
 }
 
 # declare a resource block so we can create something.
-resource "aws_s3_bucket_object" "user_student_alias_object" {
+resource "aws_s3_object" "user_student_alias_object" {
   bucket  = "terraform-intro-di-${var.student_alias}"
   key     = "student.alias"
   content = "This bucket is reserved for ${var.student_alias}"

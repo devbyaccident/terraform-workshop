@@ -36,6 +36,8 @@ sudo yum -y install jq git unzip
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
+rm -rf aws*
+aws --version
 ```
 
 ## Install Terraform
@@ -84,7 +86,7 @@ Output: [Leave this blank]
 
 There will be AWS credentials setup on Cloud9 already, but they don't have enough privileges to run the labs.
 
-Once the new credentials have been added, you'll be asked if you want to Force Update. Say yes to update Cloud9 with the new keys.
+Once the new credentials have been added, you'll be asked if you want to Force Update. Say no to update Cloud9 with the new keys.
 
 Now if you run `aws configure list-profiles` you should see the `default` profile.
 Run the command below to add this AWS profile to your `~/.bash_profile`. Any AWS CLI commands after this will use the `default` profile.

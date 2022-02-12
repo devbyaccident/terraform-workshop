@@ -150,8 +150,8 @@ terraform apply plan.out
 And you should get something similar to below
 
 ```
-aws_s3_bucket_object.user_student_alias_object: Creating...
-aws_s3_bucket_object.user_student_alias_object: Creation complete after 1s [id=student.alias]
+aws_s3_object.user_student_alias_object: Creating...
+aws_s3_object.user_student_alias_object: Creation complete after 1s [id=student.alias]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
@@ -202,7 +202,9 @@ Again, let's make sure we destroy everything we've created here
 
 ```bash
 terraform destroy
+rm -rf .terraform
 cd state-bucket
 terraform destroy
+rm -rf .terraform
 ```
-Once the resources have all been destroyed, run `rm -rf .terraform` and raise your hand.
+Once the resources have all been destroyed, raise your hand.

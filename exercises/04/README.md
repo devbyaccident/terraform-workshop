@@ -13,7 +13,7 @@ interpolation.  We will experiment with 3 ways this can be done.
 
 ```bash
 terraform init
-terraform apply
+terraform apply --auto-approve
 ```
 
 (Have you saved yourself from having to worry about your student alias as a variable again yet?)
@@ -30,8 +30,8 @@ terraform show
 You should see something like this below:
 
 ```
-# aws_s3_bucket_object.user_student_alias_object: 
-resource "aws_s3_bucket_object" "user_student_alias_object" {
+# aws_s3_object.user_student_alias_object: 
+resource "aws_s3_object" "user_student_alias_object" {
     acl           = "private"
     bucket        = "terraform-intro-di-chucky"
     content       = "This bucket is reserved for chucky"

@@ -202,11 +202,11 @@ variable "my_map" {
 }
 ...
 output "my_map_values" {
-  value = var.my_map # the ability to do this without quotes is new in 0.12!
+  value = var.my_map 
 }
 ```
 
-Maps are also not new in 0.12, and they work very similarly to how they did before, except that they now allow a type constraint
+Maps also allow a type constraint
 for the related value(s). A map is just a collection of key/values.
 
 ```hcl
@@ -240,7 +240,7 @@ Two very common examples in the AWS provider:
 So, let's look at some of this in action
 
 ```bash
-cd other-data
+cd ../other-data
 terraform init
 terraform apply
 ```
@@ -325,7 +325,7 @@ data.aws_availability_zones.available.names
 We're gonna do a little bit of experimenting as a way to finish off this exercise. This will give you an opportunity to play
 a bit with things that look interesting to you in the HCL syntax, variable, and data usage areas:
 
-1. Conditionals like ternary syntax, other expressions: https://www.terraform.io/docs/configuration/expressions.html
+1. Conditionals like ternary syntax, other expressions: https://www.terraform.io/language/expressions/conditionals
 1. Interpolation, figuring what you can and can't do here
 1. Built-in functions: https://www.terraform.io/docs/configuration/functions.html
 
