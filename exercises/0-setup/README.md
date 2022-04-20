@@ -3,16 +3,6 @@
 In this first exercise we'll make sure that we're all set up with our AWS credentials and access to AWS, and then we'll
 create a Cloud9 server/environment where we'll run further exercises.
 
-## Log into the AWS Console and Create an Access Key for yourself
-
-1. Log in to AWS using the link, username, and password provided to you
-1. In the top bar, near the right, you'll see your username/alias @ introterraform. Clicking on that will display a dropdown
-1. In the dropdown, click on "My Security Credentials"
-1. This will take you to your security credentials screen/tab. Feel free to change your password if you like, you'll be using this account for the next 2 days.
-1. Click "Create access key"
-1. An access key and secret will be created for you, **copy the Access key ID and Secret access key (or download a CSV file), we'll use them in setting your environment up below**
-1. Close out of the modal/pop-up
-
 ## Launch your Environment
 
 1. In the top bar of the AWS Console, near the left, you'll see "AWS Services", click on it, and in the drop down search box, type "Cloud9" which will filter available services in the search list. Click on "Cloud9" which will take you to where we can create your environment.
@@ -71,29 +61,6 @@ do this:
 mkdir -p workshop
 cd workshop
 git clone https://github.com/devbyaccident/terraform-workshop .
-```
-
-## Set up your environment credentials to connect to AWS
-
-Now we need to add the access and secret access keys to our AWS Profile. Enter `aws configure`, then put in the following values when prompted:
-
-```bash
-Access Key ID: [AWS Access Key]
-Secret Access Key: [AWS Secret Access Key]
-Region: us-east-1
-Output: [Leave this blank]
-```
-
-There will be AWS credentials setup on Cloud9 already, but they don't have enough privileges to run the labs.
-
-Once the new credentials have been added, you'll be asked if you want to Force Update. Say no to update Cloud9 with the new keys.
-
-Now if you run `aws configure list-profiles` you should see the `default` profile.
-Run the command below to add this AWS profile to your `~/.bash_profile`. Any AWS CLI commands after this will use the `default` profile.
-
-```bash
-echo 'AWS_PROFILE=default' >> ~/.bash_profile
-source ~/.bash_profile
 ```
 
 Having done that, we should be ready to move on!

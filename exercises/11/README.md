@@ -100,12 +100,15 @@ We're getting this because our microservice module is using:
 ```
 Don't worry about `depends_on` yet, we'll go into that in the next section.
 Referencing outputs from other resources/modules inside quotes was depricated in Terraform 0.12, but you still may encounter it in some legacy terraform code. It will still run, but it will throw warning messages, and is not considered a best practice.
-There are a couple of ways to fix this: 
-1. First, you could go into the `main.tf` file in the microservice module, find that line, and delete the quotes.
-1. Terraform 0.12 also included a `terraform fmt` command that formats all terraform code in the current directory with the terraform style guidelines.
-1. The fmt command can also be run recursivly in all subdirectories on the working directory. Run `terraform fmt --recursive` to format all *.tf files in your project.
+Here is how to fix this: 
+1. First, go into the `main.tf` file in the microservice module
+1. Find that line
+1. Delete the quotes.
 
-You may have to do a combination of these to format your code. Once you do, you can re-run init:
+Sometimes running the `terraform fmt` command will fix style issues like that, but it doesn't catch everything, so it's worth knowing how to fix it when you see it.
+
+Once you're done, remove the *.terraform* directory and re-run init:
+
 ```bash
 rm -rf .terraform
 terraform init
@@ -157,7 +160,7 @@ things in the meantime
 #### Dependencies
 
 ```
-depends_on = ["aws_alb_listener.http"]
+depends_on = [aws_alb_listener.http]
 ```
 
 The `depends_on` meta attribute is a common terraform resource property that allows you to define explicit dependencies. In most

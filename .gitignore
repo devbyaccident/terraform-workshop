@@ -7,3 +7,4 @@ node_modules
 *.log
 pgp_key
 print-users.rtf
+names.txt
