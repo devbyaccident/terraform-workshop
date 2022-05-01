@@ -1,5 +1,11 @@
 # Exercise #1: Your First Terraform Project
 
+The first thing you'll need to do is change into the *exercises/01* directory. Anytime you run any Terraform commands, they are looking for files in the current working directory.
+
+```bash
+cd workshop/exercises/01
+```
+
 Take a look at this directory.  You should see a couple of files aside from this README.
 
 ```bash
