@@ -1,7 +1,7 @@
 # S3 backend example 
 # see https://www.terraform.io/docs/backends/types/s3.html
 
-# Run this from your own machine as well as from your Cloud9 IDE
+# Run this from your own machine as well as from your Cloudshell IDE
 # and you'll see that state is maintained across both machines.
 terraform {
   required_providers {

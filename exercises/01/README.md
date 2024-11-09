@@ -75,6 +75,6 @@ We will get to this in a future exercise.
 
 When you run the `terraform init` command, notice that a new *.terraform* directory was created.
 
-We are going to learn about this later, but since Cloud9 instances are limited on storage, it's a good idea to clean this up before finishing the exercise so it doesn't impact future exercises.
+We are going to learn about this later, but since Cloudshell instances are limited on storage, it's a good idea to clean this up before finishing the exercise so it doesn't impact future exercises.
 
 To do this, run `rm -rf .terraform`, then raise your hand to show that you're finished with the exercise.

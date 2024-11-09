@@ -40,7 +40,7 @@ terraform show
 The above should show that you have a bucket now named `terraform-intro-di-[your student alias]-alt` that was created in the
 us-west-2 region.
 
-*NOTE:* that at the beginning of our course we set the `AWS_DEFAULT_REGION` environment variable in your Cloud9 environment.
+*NOTE:* that at the beginning of our course we set the `AWS_DEFAULT_REGION` environment variable in your Cloudshell environment.
 Along with this variable and the access key and secret key, terraform is able to use these environment variables for the AWS
 provider as defaults unless you override them in the HCL provider block.
 
