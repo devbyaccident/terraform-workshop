@@ -8,11 +8,11 @@ resource "aws_s3_bucket" "student_buckets" {
   force_destroy = true
 }
 
-resource "aws_s3_bucket_acl" "student_bucket_acl" {
-  count  = length(var.students)
-  bucket = aws_s3_bucket.student_buckets[count.index].id
-  acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "student_bucket_acl" {
+#   count  = length(var.students)
+#   bucket = aws_s3_bucket.student_buckets[count.index].id
+#   acl    = "private"
+# }
 
 resource "aws_iam_account_password_policy" "students" {
   minimum_password_length        = 8
@@ -238,10 +238,10 @@ resource "aws_iam_user_policy_attachment" "student_credentials_access" {
   depends_on = [aws_iam_user.students]
 }
 
-resource "aws_iam_user_policy_attachment" "cloud9_user_access" {
+resource "aws_iam_user_policy_attachment" "cloudshell_user_access" {
   count      = length(var.students)
   user       = var.students[count.index].name
-  policy_arn = "arn:aws:iam::aws:policy/AWSCloud9User"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCloudShellFullAccess"
   depends_on = [aws_iam_user.students]
 }
 

@@ -18,7 +18,7 @@ terraform {
 We need to specify the S3 bucket which stores the state, and we can't use a variable or a local, so you'll need to
 first edit `main.tf` to enter the actual name of your bucket. 
 
-Now run `terraform apply` in your Cloud9 IDE. This will create an instance. (You might want to take note of the instance
+Now run `terraform apply` in your Cloudshell IDE. This will create an instance. (You might want to take note of the instance
 ID which is shown in the EC2 console.)
 
 Run `terraform plan` and confirm that Terraform says nothing needs to be done. You should see something like this:
