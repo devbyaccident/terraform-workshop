@@ -11,6 +11,7 @@ for username in $(echo $values | jq -r '.students.value[].name'); do
 	echo "Instructions repo:     https://github.com/devbyaccident/Introduction-to-Terraform"
 	echo "Console URL:           https://$account_id.signin.aws.amazon.com/console"
 	echo "Username/Alias:        $username"
+	echo "Storage Account Name:  $username"
 	password=$(echo $values | jq -r '.passwords.value[]['"$i"']' | base64 --decode | gpg -dq)
 	echo "AWS Console Password:  $password"
 	region=$(echo $values | jq -r '.students.value['"$i"'].region')
