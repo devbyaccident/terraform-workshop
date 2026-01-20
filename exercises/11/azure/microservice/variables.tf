@@ -47,7 +47,7 @@ variable "key_name" {
 variable "server_http_port" {
   type        = number
   description = "The port the EC2 Instances should listen on for HTTP requests"
-  default     = 8080
+  default     = 80
 }
 
 variable "alb_http_port" {

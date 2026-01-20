@@ -234,8 +234,8 @@ Remember earlier when we queried the state of another terraform project? That wa
 providers allow you the ability to query particular sources to get things you need at runtime with the same mechanism. 
 Two very common examples in the AWS provider:
 
-1. Querying available AMI images in AWS to get the AMI ID to use for your EC2 instance
-1. Querying availability zones in your current AWS region. This is useful for things like ensuring that you have a resource in every AZ for your region
+1. Querying the current Azure subscription the provider is using.
+1. Querying availability zone mappings in your current Azure region. This is useful for things like ensuring that you have a resource in every AZ for your region
 
 So, let's look at some of this in action
 
@@ -248,76 +248,84 @@ terraform apply
 And you should get something like the following as the output
 
 ```
-data.aws_ami.ubuntu: Refreshing state...
-data.aws_availability_zones.available: Refreshing state...
+data.azurerm_location.this: Reading...
+data.azurerm_location.this: Read complete after 1s [id=/subscriptions/84db9a41-af69-4475-b90d-63d83f0d71dc/locations/eastus2]
+
+Changes to Outputs:
+  + current_location = "eastus2"
+  + zones = [
+      + {
+          + logical_zone  = "1"
+          + physical_zone = "eastus2-az2"
+        },
+      + {
+          + logical_zone  = "2"
+          + physical_zone = "eastus2-az3"
+        },
+      + {
+          + logical_zone  = "3"
+          + physical_zone = "eastus2-az1"
+        },
+    ]
+
+You can apply this plan to save these new output values to the Terraform state, without changing any real infrastructure.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
 
 Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-current_region_availability_zones = [
-  "us-east-2a",
-  "us-east-2b",
-  "us-east-2c",
-]
-most_recent_ubuntu_ami_id = ami-0d03add87774b12c5
+current_location = "eastus2"
+zones = tolist([
+  {
+    "logical_zone" = "1"
+    "physical_zone" = "eastus2-az2"
+  },
+  {
+    "logical_zone" = "2"
+    "physical_zone" = "eastus2-az3"
+  },
+  {
+    "logical_zone" = "3"
+    "physical_zone" = "eastus2-az1"
+  },
+])
 ```
 
-Two different data sources are being called here:
+There is one data source are being called here to provide two different pieces of information:
 
-1. The AWS AMI data source
-1. The AWS availability zones data source
+1. The current Azure location
+1. The mapping of Physical Zones to Logical Zones (You can read more about why these are different [here](https://learn.microsoft.com/en-us/azure/reliability/availability-zones-overview?tabs=azure-powershell#physical-and-logical-availability-zones))
 
-First, a look at the `main.tf` relevant resource that actually did the AMI querying for us
+First, a look at the `main.tf` relevant resource that actually did the lookup for us. You can see the required parameters to use each data source in the Azure Provider documentation. 
 
 ```hcl
-# A Terraform data source is a specific type of resource that gives us the ability to pull in data from elsewhere to
-# use in our own terraform HCL and operations
-data "aws_ami" "ubuntu" {
-  most_recent = true
+provider "azurerm" {
+  features {}
+}
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
+data "azurerm_location" "this" {
+  location = "East US 2"
 }
 ```
-
-Don't worry too much about all the pieces here, the most important part to understand right now is really `data "aws_ami"`. This
-is a data source type resource that is a generic construct in Terraform itself. The AWS provider implements this `aws_ami` data
-source type so that we can query AMIs available in AWS.
 
 After the data source resource is declared, we can then access it's attributes that have been populated by actually making the
-query to AWS
+query to Azure
 
 ```
-data.aws_ami.ubuntu.id
-```
-
-Second, let's look at the availability zone query pieces
-
-```hcl
-# Another AWS provider data source, giving us the ability to get all of the AZs in our current region
-data "aws_availability_zones" "available" {
-  state = "available"
+output "zones" {
+  value = data.azurerm_location.this.zone_mappings
 }
-```
 
-Availability zones are specific to a particular region, and we're not passing in a region here, so how is this working? If you
-can't figure out, ask your instructor for a little help.
-
-Similar to the AMI data source, this one also has attributes that have been populated and can be accessed after the query to
-the AWS api actually happens. So in our subsequent HCL, we can access the `names` attribute, giving us all AZ names
-
-```
-data.aws_availability_zones.available.names
+output "current_location" {
+  value = data.azurerm_location.this.location
+}
 ```
 
 ### Finishing off this exercise
