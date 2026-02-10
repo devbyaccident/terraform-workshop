@@ -55,7 +55,7 @@ resource "azurerm_storage_container" "student_container" {
 resource "random_password" "student_password" {
   count   = length(var.students)
   length  = 16
-  special = false
+  special = true
 }
 
 # Create Azure AD user for each student
